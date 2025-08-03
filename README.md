@@ -55,7 +55,7 @@ The inference pipeline is optimized for handling real-time data retrieval and ef
 **Outcome:** This approach provides a fast, responsive, and user-friendly experience, allowing users to receive tailored financial advice on demand.
 
 #### Functionality of the Financial Advisory Tool
-* **Overall Workflow:** The tool’s workflow begins with data ingestion, followed by cleaning and embedding in Qdrant for storage. LoRA fine-tunes the model, enabling it to provide context-aware financial insights, while RAG dynamically retrieves relevant data during inference.
+* **Overall Workflow:** The tool’s workflow begins with data ingestion, followed by cleaning and embedding in Qdrant for storage. LoRA fine-tunes the model, enabling it to provide context-aware financial insights.
 * **User Experience:** The deployed model, accessible via a RESTful API and Gradio interface, allows users to ask financial questions and receive accurate advice quickly. The real-time data retrieval architecture ensures that the model’s responses incorporate the latest information.
 * **Adaptability and Reliability:** The integration of real-time data and advanced language modeling techniques makes the tool adaptable to individual user needs, offering a scalable solution for delivering reliable financial guidance.
 
