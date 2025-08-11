@@ -175,7 +175,7 @@ print(response)
 
 ## Web Interface
 
-![web_interface](D:\project\finadvisor-llm\frontend.png)
+![web_interface](frontend.png)
 
 ### Features
 - **Dynamic Model Selection**: Choose between LLaMA 7B and Mistral 7B models
