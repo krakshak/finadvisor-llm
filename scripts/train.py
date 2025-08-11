@@ -1,5 +1,5 @@
 """
-Script to run end-to-end LLaMA training using modular pipeline.
+End-to-end LLaMA training using modular pipeline.
 """
 import os
 from training_pipeline.config import Config
