@@ -5,7 +5,8 @@ Flask frontend for FinAdvisor - Financial Advisory Tool
 from flask import Flask, render_template, request, jsonify, session
 import logging
 import os
-from inference_pipeline.inference_engine import get_inference_engine
+from inference_pipeline.inference_engine import get_inference_engine, switch_model
+from inference_pipeline.model_loader import get_available_models
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -14,13 +15,11 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'finadvisor-secret-key-change-in-production')
 
-# Initialize inference engine
-inference_engine = get_inference_engine()
-
 @app.route('/')
 def index():
     """Main page with the financial advisory interface."""
-    return render_template('index.html')
+    available_models = get_available_models()
+    return render_template('index.html', available_models=available_models)
 
 @app.route('/api/generate', methods=['POST'])
 def generate_advice():
@@ -31,6 +30,7 @@ def generate_advice():
         # Extract parameters from request
         instruction = data.get('instruction', '').strip()
         input_text = data.get('input', '').strip()
+        model_name = data.get('model', 'LLaMa 7B')
         temperature = float(data.get('temperature', 0.6))
         top_p = float(data.get('top_p', 0.95))
         max_tokens = int(data.get('max_tokens', 128))
@@ -43,7 +43,10 @@ def generate_advice():
                 'success': False
             }), 400
         
-        logger.info(f"Generating advice for instruction: {instruction[:100]}...")
+        logger.info(f"Generating advice using {model_name} for instruction: {instruction[:100]}...")
+        
+        # Get inference engine for the selected model
+        inference_engine = get_inference_engine(model_name)
         
         # Generate response using inference engine
         response = inference_engine.evaluate(
@@ -58,6 +61,7 @@ def generate_advice():
         return jsonify({
             'response': response,
             'success': True,
+            'model': model_name,
             'parameters': {
                 'temperature': temperature,
                 'top_p': top_p,

@@ -4,9 +4,26 @@ Configuration settings for the FinAdvisor LLM inference pipeline.
 
 import torch
 
-# Model Configuration
-BASE_MODEL = "baffo32/decapoda-research-llama-7B-hf"
-LORA_WEIGHTS = "kunchum/capstone-llama-finetuned"
+# Available Models Configuration
+MODELS = {
+    "LLaMa 7B": {
+        "base_model": "baffo32/decapoda-research-llama-7B-hf",
+        "lora_weights": "kunchum/capstone-llama-finetuned",
+        "model_type": "llama"
+    },
+    "Mistral 7B": {
+        "base_model": "mistralai/Mistral-7B-v0.1",
+        "lora_weights": "kunchum/capstone-mistral-finetuned",
+        "model_type": "mistral"
+    }
+}
+
+# Default Model
+DEFAULT_MODEL = "LLaMa 7B"
+
+# Backward compatibility
+BASE_MODEL = MODELS[DEFAULT_MODEL]["base_model"]
+LORA_WEIGHTS = MODELS[DEFAULT_MODEL]["lora_weights"]
 
 # Device Configuration
 def get_device():

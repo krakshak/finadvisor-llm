@@ -1,10 +1,15 @@
 import torch
-from transformers import LlamaForCausalLM, LlamaTokenizer, BitsAndBytesConfig
+from transformers import (
+    LlamaForCausalLM, LlamaTokenizer,
+    AutoModelForCausalLM, AutoTokenizer,
+    BitsAndBytesConfig
+)
 from peft import (
     prepare_model_for_kbit_training,
     LoraConfig,
     get_peft_model
 )
+from .config import MODEL_CONFIGS
 
 class ModelModule:
     def __init__(self, config):
@@ -13,21 +18,54 @@ class ModelModule:
         self.tokenizer = None
 
     def load_tokenizer(self):
-        self.tokenizer = LlamaTokenizer.from_pretrained(
-            self.config.MODEL_NAME_OR_PATH, add_eos_token=True
-        )
-        self.tokenizer.pad_token_id = 0  # unk. we want this to be different from the eos token
+        model_config = MODEL_CONFIGS[self.config.MODEL_NAME]
+        model_type = model_config["model_type"]
+        
+        if model_type == "llama":
+            self.tokenizer = LlamaTokenizer.from_pretrained(
+                self.config.BASE_MODEL, add_eos_token=True
+            )
+        elif model_type == "mistral":
+            self.tokenizer = AutoTokenizer.from_pretrained(
+                self.config.BASE_MODEL, add_eos_token=True
+            )
+        else:
+            # Fallback to AutoTokenizer
+            self.tokenizer = AutoTokenizer.from_pretrained(
+                self.config.BASE_MODEL, add_eos_token=True
+            )
+        
+        self.tokenizer.pad_token_id = 0  # unknown token
         return self.tokenizer
 
     def load_model(self):
+        model_config = MODEL_CONFIGS[self.config.MODEL_NAME]
+        model_type = model_config["model_type"]
+        
         quantization_config = BitsAndBytesConfig(
             load_in_8bit=True,
         )
-        self.model = LlamaForCausalLM.from_pretrained(
-            self.config.MODEL_NAME_OR_PATH,
-            quantization_config=quantization_config,
-            device_map=self.config.device_map,
-        )
+        
+        if model_type == "llama":
+            self.model = LlamaForCausalLM.from_pretrained(
+                self.config.BASE_MODEL,
+                quantization_config=quantization_config,
+                device_map=self.config.DEVICE_MAP,
+            )
+        elif model_type == "mistral":
+            self.model = AutoModelForCausalLM.from_pretrained(
+                self.config.BASE_MODEL,
+                quantization_config=quantization_config,
+                device_map=self.config.DEVICE_MAP,
+            )
+        else:
+            # Fallback to AutoModel
+            self.model = AutoModelForCausalLM.from_pretrained(
+                self.config.BASE_MODEL,
+                quantization_config=quantization_config,
+                device_map=self.config.DEVICE_MAP,
+            )
+        
         self.model = prepare_model_for_kbit_training(self.model)
         return self.model
 

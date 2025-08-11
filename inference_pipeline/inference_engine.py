@@ -6,9 +6,9 @@ import torch
 from transformers import GenerationConfig
 import logging
 
-from .config import DEFAULT_GENERATION_CONFIG, DEVICE
+from .config import DEFAULT_GENERATION_CONFIG, DEVICE, DEFAULT_MODEL
 from .prompt_utils import generate_prompt, extract_response
-from .model_loader import get_model_loader
+from .model_loader import get_model_loader, get_available_models
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -17,8 +17,9 @@ logger = logging.getLogger(__name__)
 class InferenceEngine:
     """Handles LLM inference for financial advisory tasks."""
     
-    def __init__(self):
-        self.model_loader = get_model_loader()
+    def __init__(self, model_name=None):
+        self.model_name = model_name or DEFAULT_MODEL
+        self.model_loader = get_model_loader(self.model_name)
         self.tokenizer = None
         self.model = None
         self.device = DEVICE
@@ -27,10 +28,10 @@ class InferenceEngine:
     def initialize(self):
         """Initialize the inference engine with model and tokenizer."""
         if not self._initialized:
-            logger.info("Initializing inference engine...")
+            logger.info(f"Initializing inference engine with {self.model_name}...")
             self.tokenizer, self.model = self.model_loader.initialize()
             self._initialized = True
-            logger.info("Inference engine initialized successfully")
+            logger.info(f"Inference engine initialized successfully with {self.model_name}")
     
     def generate_response(
         self,
@@ -146,12 +147,22 @@ class InferenceEngine:
         )
 
 
-# Global inference engine instance
-_inference_engine = None
+# Global inference engine instances
+_inference_engines = {}
 
-def get_inference_engine():
-    """Get the global inference engine instance."""
-    global _inference_engine
-    if _inference_engine is None:
-        _inference_engine = InferenceEngine()
-    return _inference_engine
+def get_inference_engine(model_name=None):
+    """Get the inference engine instance for the specified model."""
+    global _inference_engines
+    model_name = model_name or DEFAULT_MODEL
+    
+    if model_name not in _inference_engines:
+        _inference_engines[model_name] = InferenceEngine(model_name)
+    
+    return _inference_engines[model_name]
+
+def switch_model(model_name):
+    """Switch to a different model."""
+    if model_name not in get_available_models():
+        raise ValueError(f"Model {model_name} not available. Available models: {get_available_models()}")
+    
+    return get_inference_engine(model_name)
