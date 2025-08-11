@@ -175,6 +175,8 @@ print(response)
 
 ## Web Interface
 
+![web_interface](D:\project\finadvisor-llm\frontend.png)
+
 ### Features
 - **Dynamic Model Selection**: Choose between LLaMA 7B and Mistral 7B models
 - **Interactive Parameters**: Real-time slider controls for temperature, top-p, max tokens, and repetition penalty
@@ -254,20 +256,6 @@ DEFAULT_GENERATION_CONFIG = {
 - "Is it better to rent or buy a home?"
 - "How should I diversify my investment portfolio?"
 
-## Development
-
-### Training a New Model
-1. Prepare your financial dataset
-2. Update `training_pipeline/config.py`
-3. Run the training notebook or script
-4. Monitor training with MLFlow
-5. Update inference config with new model path
-
-### Customizing the Interface
-1. Modify `templates/index.html` for UI changes
-2. Update `static/css/style.css` for styling
-3. Extend `static/js/app.js` for new functionality
-4. Add new API endpoints in `app.py`
 
 ## Troubleshooting
 

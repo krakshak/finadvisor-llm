@@ -1,35 +1,44 @@
 // FinAdvisor Frontend JavaScript
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Get form elements
+    // Get DOM elements
     const form = document.getElementById('advisoryForm');
     const generateBtn = document.getElementById('generateBtn');
     const loadingSpinner = document.getElementById('loadingSpinner');
-    const output = document.getElementById('output');
-    const errorMessage = document.getElementById('errorMessage');
-    const errorText = document.getElementById('errorText');
+    const response = document.getElementById('response');
+    const modelSelect = document.getElementById('model');
+    const selectedModelDisplay = document.getElementById('selected-model-display');
+    
+    // Parameter sliders and their display elements
+    const tempSlider = document.getElementById('temperature');
+    const tempValue = document.getElementById('temp-value');
+    const topPSlider = document.getElementById('top_p');
+    const topPValue = document.getElementById('top-p-value');
+    const maxTokensSlider = document.getElementById('max_tokens');
+    const maxTokensValue = document.getElementById('max-tokens-value');
+    const repPenaltySlider = document.getElementById('repetition_penalty');
+    const repPenaltyValue = document.getElementById('rep-penalty-value');
 
-    // Parameter sliders and their value displays
+    // Update slider value displays
     const sliders = {
         temperature: {
-            slider: document.getElementById('temperature'),
-            display: document.getElementById('tempValue')
+            slider: tempSlider,
+            display: tempValue
         },
         top_p: {
-            slider: document.getElementById('top_p'),
-            display: document.getElementById('topPValue')
+            slider: topPSlider,
+            display: topPValue
         },
         max_tokens: {
-            slider: document.getElementById('max_tokens'),
-            display: document.getElementById('maxTokensValue')
+            slider: maxTokensSlider,
+            display: maxTokensValue
         },
         repetition_penalty: {
-            slider: document.getElementById('repetition_penalty'),
-            display: document.getElementById('repPenaltyValue')
+            slider: repPenaltySlider,
+            display: repPenaltyValue
         }
     };
 
-    // Update slider value displays
     Object.keys(sliders).forEach(key => {
         const slider = sliders[key].slider;
         const display = sliders[key].display;
@@ -93,41 +102,35 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Model selection change handler
+    modelSelect.addEventListener('change', function() {
+        selectedModelDisplay.textContent = this.value;
+    });
+
+    // Initialize model display
+    selectedModelDisplay.textContent = modelSelect.value;
+
     // Show loading state
     function showLoading() {
         generateBtn.disabled = true;
-        generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Generating...';
         loadingSpinner.classList.remove('d-none');
-        output.classList.add('d-none');
-        errorMessage.classList.add('d-none');
+        response.textContent = 'Generating response...';
     }
 
     // Show response
     function showResponse(responseText) {
         generateBtn.disabled = false;
-        generateBtn.innerHTML = '<i class="fas fa-magic me-2"></i>Generate Advice';
         loadingSpinner.classList.add('d-none');
-        output.classList.remove('d-none');
-        errorMessage.classList.add('d-none');
-        
-        output.textContent = responseText;
-        output.classList.add('has-content');
-        
-        // Scroll to output
-        output.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        response.textContent = responseText;
+        response.classList.add('has-content');
     }
 
     // Show error
     function showError(message) {
         generateBtn.disabled = false;
-        generateBtn.innerHTML = '<i class="fas fa-magic me-2"></i>Generate Advice';
         loadingSpinner.classList.add('d-none');
-        output.classList.add('d-none');
-        errorMessage.classList.remove('d-none');
-        errorText.textContent = message;
-        
-        // Scroll to error
-        errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        response.textContent = `Error: ${message}`;
+        response.classList.remove('has-content');
     }
 
     // Check API health on page load

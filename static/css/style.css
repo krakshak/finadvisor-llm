@@ -1,19 +1,27 @@
-/* FinAdvisor Custom Styles */
+/* FinAdvisor Custom Styles - Dark Theme */
 
 :root {
-    --primary-color: #2c5aa0;
-    --secondary-color: #f8f9fa;
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
     --accent-color: #28a745;
     --warning-color: #ffc107;
     --danger-color: #dc3545;
-    --dark-color: #343a40;
+    --dark-color: #212529;
+    --darker-color: #1a1d23;
     --light-color: #ffffff;
+    --text-light: #e9ecef;
+    --text-muted: #adb5bd;
+    --border-color: #495057;
+    --input-bg: #343a40;
 }
 
 body {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-color: var(--darker-color);
+    color: var(--text-light);
     min-height: 100vh;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
 }
 
 .container-fluid {
@@ -32,86 +40,137 @@ header p {
 }
 
 /* Card Styles */
-.card {
-    border: none;
-    border-radius: 15px;
-    backdrop-filter: blur(10px);
-    background: rgba(255, 255, 255, 0.95);
+.main-card {
+    background-color: var(--dark-color);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
-.card-header {
-    background: linear-gradient(45deg, var(--primary-color), #4a69bd);
-    color: white;
-    border-radius: 15px 15px 0 0 !important;
-    border: none;
+.header-section {
+    background-color: var(--dark-color);
+    color: var(--text-light);
+    border-radius: 8px 8px 0 0;
+    padding: 1.5rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.header-section h1 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-light);
+}
+
+.header-section p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    margin-bottom: 0;
 }
 
 /* Form Controls */
 .form-control, .form-select {
-    border-radius: 10px;
-    border: 2px solid #e9ecef;
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: var(--text-light);
     transition: all 0.3s ease;
 }
 
 .form-control:focus, .form-select:focus {
+    background-color: var(--input-bg);
     border-color: var(--primary-color);
-    box-shadow: 0 0 0 0.2rem rgba(44, 90, 160, 0.25);
+    color: var(--text-light);
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.form-control::placeholder {
+    color: var(--text-muted);
+}
+
+.form-label {
+    font-weight: 500;
+    color: var(--text-light);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
 }
 
 /* Range Sliders */
+.form-range {
+    background-color: transparent;
+}
+
+.form-range::-webkit-slider-track {
+    background: var(--border-color);
+    border-radius: 2px;
+    height: 4px;
+}
+
 .form-range::-webkit-slider-thumb {
     background: var(--primary-color);
-    border: 2px solid white;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    border: none;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
 }
 
 .form-range::-moz-range-thumb {
     background: var(--primary-color);
-    border: 2px solid white;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    border: none;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.form-range::-moz-range-track {
+    background: var(--border-color);
+    border-radius: 2px;
+    height: 4px;
 }
 
 /* Buttons */
 .btn-primary {
-    background: linear-gradient(45deg, var(--primary-color), #4a69bd);
-    border: none;
-    border-radius: 25px;
-    padding: 12px 30px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    background-color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-weight: 500;
+    color: white;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(44, 90, 160, 0.3);
 }
 
 .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(44, 90, 160, 0.4);
-    background: linear-gradient(45deg, #4a69bd, var(--primary-color));
+    background-color: #0056b3;
+    border-color: #0056b3;
+    color: white;
 }
 
 .btn-primary:disabled {
     opacity: 0.6;
-    transform: none;
-    box-shadow: 0 4px 15px rgba(44, 90, 160, 0.3);
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
 }
 
 /* Response Output */
 .response-output {
     min-height: 150px;
-    padding: 20px;
-    background: #f8f9fa;
-    border-radius: 10px;
-    border-left: 4px solid var(--primary-color);
-    font-size: 16px;
-    line-height: 1.6;
+    padding: 15px;
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: var(--text-light);
+    font-size: 14px;
+    line-height: 1.5;
     white-space: pre-wrap;
     word-wrap: break-word;
 }
 
 .response-output.has-content {
-    background: #e8f5e8;
-    border-left-color: var(--accent-color);
+    background-color: var(--input-bg);
+    border-color: var(--accent-color);
 }
 
 /* Loading Animation */
@@ -120,16 +179,55 @@ header p {
     height: 3rem;
 }
 
-/* Parameter Labels */
-.form-label {
-    font-weight: 600;
-    color: var(--dark-color);
-    margin-bottom: 8px;
+/* Model Selection Section */
+.model-selection-info {
+    background-color: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 15px;
+    margin-top: 20px;
 }
 
+.model-selection-info h6 {
+    color: var(--text-light);
+    margin-bottom: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.model-selection-info p {
+    color: var(--text-muted);
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+}
+
+/* Parameter Labels */
 .form-label span {
     color: var(--primary-color);
-    font-weight: 700;
+    font-weight: 600;
+}
+
+/* Parameter Row */
+.parameter-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.parameter-row .col {
+    flex: 1;
+}
+
+/* Input Row */
+.input-row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.input-row .col {
+    flex: 1;
 }
 
 /* Small Text */
